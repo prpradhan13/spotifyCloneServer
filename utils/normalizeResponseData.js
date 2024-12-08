@@ -20,6 +20,17 @@ export const normalizePopularPlaylists = (playLists) => {
     }));
 };
 
+export const normalizeSinglePlaylist = (playList) => {
+    return {
+      id: playList.id,
+      name: playList.name,
+      imageUrl: playList.images?.[0]?.url || '',
+      type: playList.type,
+      playListOwnerName: playList.owner.display_name || "Unknown Owner",
+      tracks: playList.tracks.items
+    };
+};
+
 export const normalizeSeveralArtists = (artists) => {
   return artists.map(artist => ({
     id: artist.id,
@@ -29,14 +40,14 @@ export const normalizeSeveralArtists = (artists) => {
   }));
 }
 
-// export const normalizeSingleAlbum = (albums) => {
-//     return albums.map(album => ({
-//       id: album.id,
-//       name: album.name,
-//       imageUrl: album.images,
-//       type: album.type,
-//       releaseDate: album.release_date,
-//       artist: album.artists,
-//       tracks: album.tracks
-//     }));
-// };
+export const normalizeSingleAlbum = (album) => {
+    return {
+      id: album.id,
+      name: album.name,
+      imageUrl: album.images?.[0]?.url || '',
+      type: album.type,
+      releaseDate: album.release_date,
+      artist: album.artists,
+      tracks: album.tracks.items
+    };
+};

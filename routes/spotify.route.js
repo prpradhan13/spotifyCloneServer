@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.post("/popular-playlists", getPopularPlaylists);
 
-router.get("/playlists/:playlist_id", getSinglePlaylists);
+router.get("/playlists/:playlistId", getSinglePlaylists);
 
 // Get several artists
 router.get("/artists", getSeveralArtists);

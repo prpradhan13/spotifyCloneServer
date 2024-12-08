@@ -1,5 +1,5 @@
 import spotifyApi from "../utils/getAccessToken.js";
-import { normalizeAlbums, normalizePopularPlaylists, normalizeSeveralArtists } from "../utils/normalizeResponseData.js";
+import { normalizeAlbums, normalizePopularPlaylists, normalizeSeveralArtists, normalizeSingleAlbum, normalizeSinglePlaylist } from "../utils/normalizeResponseData.js";
 
 export const getPopularPlaylists = async (req, res) => {
     try {
@@ -46,10 +46,12 @@ export const getSinglePlaylists = async (req, res) => {
         const { playlistId } = req.params;
         
         const data = await spotifyApi.getPlaylist(playlistId);
+
+        const normalizedSinglePlaylists = normalizeSinglePlaylist(data.body)
         
         return res.status(200).json({
             success: true,
-            playList: data.body
+            playList: normalizedSinglePlaylists
         })
     } catch (error) {
         console.log(error);
@@ -161,10 +163,12 @@ export const getSingleAlbum = async (req, res) => {
         const { albumId } = req.params;
 
         const data = await spotifyApi.getAlbum(albumId);
+
+        const normalizedSingleAlbum = normalizeSingleAlbum(data.body)
         
         return res.status(200).json({
             success: true,
-            playListData: data.body
+            playListData: normalizedSingleAlbum
         })
     } catch (error) {
         console.log(error);
