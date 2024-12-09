@@ -10,6 +10,18 @@ export const normalizeAlbums = (albums) => {
     }));
 };
 
+export const normalizeSingleAlbum = (album) => {
+  return {
+    id: album.id,
+    name: album.name,
+    imageUrl: album.images?.[0]?.url || '',
+    type: album.type,
+    releaseDate: album.release_date,
+    artist: album.artists,
+    tracks: album.tracks.items
+  };
+};
+
 export const normalizePopularPlaylists = (playLists) => {
     return playLists.map(playList => ({
       id: playList.id,
@@ -40,14 +52,28 @@ export const normalizeSeveralArtists = (artists) => {
   }));
 }
 
-export const normalizeSingleAlbum = (album) => {
-    return {
-      id: album.id,
-      name: album.name,
-      imageUrl: album.images?.[0]?.url || '',
-      type: album.type,
-      releaseDate: album.release_date,
-      artist: album.artists,
-      tracks: album.tracks.items
-    };
+export const normalizeSingleArtistTracks = (tracks) => {
+  return tracks.map(track => ({
+    id: track.id,
+    trackName: track.name,
+    imageUrl: track.album.images?.[0]?.url || '',
+    artists: track.artists?.map(artist => artist.name)
+  }));
 };
+
+export const normalizeSingleArtistData = (artist) => {
+  return {
+    id: artist.id,
+    imageUrl: artist.images?.[0]?.url || '',
+    name: artist.name
+  }
+};
+
+export const normalizeTrack = (track) => {
+  return {
+    id: track.id,
+    trackName: track.name,
+    artists: track.artists,
+    imageUrl: track.album.images?.[0]?.url || '',
+  }
+}

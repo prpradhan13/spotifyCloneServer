@@ -1,5 +1,5 @@
 import express from 'express';
-import { getSingleAlbum, getSinglePlaylists, getSeveralAlbums, getPopularPlaylists, getSeveralArtists, getArtistTopTracks } from '../controllers/spotify.controller.js';
+import { getSingleAlbum, getSinglePlaylists, getSeveralAlbums, getPopularPlaylists, getSeveralArtists, getArtistTopTracks, getSingleArtistData, getTrackDetails } from '../controllers/spotify.controller.js';
 
 const router = express.Router();
 
@@ -10,11 +10,17 @@ router.get("/playlists/:playlistId", getSinglePlaylists);
 // Get several artists
 router.get("/artists", getSeveralArtists);
 
-router.get("/artists/:artist_id/top-tracks", getArtistTopTracks);
+// Get Single Artist Data
+router.get("/artists/:artistId", getSingleArtistData);
+
+// Get Artist Top Tracks
+router.get("/artists/:artistId/top-tracks", getArtistTopTracks);
 
 // Get several albums
 router.get("/albums", getSeveralAlbums);
 
 router.get("/albums/:albumId", getSingleAlbum);
+
+router.get("/tracks/:trackId", getTrackDetails);
 
 export default router

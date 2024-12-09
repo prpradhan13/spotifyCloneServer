@@ -1,5 +1,5 @@
 import spotifyApi from "../utils/getAccessToken.js";
-import { normalizeAlbums, normalizePopularPlaylists, normalizeSeveralArtists, normalizeSingleAlbum, normalizeSinglePlaylist } from "../utils/normalizeResponseData.js";
+import { normalizeAlbums, normalizePopularPlaylists, normalizeSeveralArtists, normalizeSingleAlbum, normalizeSingleArtistData, normalizeSingleArtistTracks, normalizeSinglePlaylist, normalizeTrack } from "../utils/normalizeResponseData.js";
 
 export const getPopularPlaylists = async (req, res) => {
     try {
@@ -100,15 +100,39 @@ export const getSeveralArtists = async (req, res) => {
     }
 };
 
-export const getArtistTopTracks = async (req, res) => {
+export const getSingleArtistData = async (req, res) => {
     try {
-        const { artist_id } = req.params;
+        const { artistId } = req.params;
 
-        const data = await spotifyApi.getArtistTopTracks(artist_id, { country: 'IN' }).then((value) => value)
-        
+        const data = await spotifyApi.getArtist(artistId);
+
+        const normalizedSingleArtist = normalizeSingleArtistData(data.body)
+
         return res.status(200).json({
             success: true,
-            playListData: data.body.tracks
+            artist: normalizedSingleArtist
+        })
+        
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            message: "Error in getSingleArtistData"
+        })
+    }
+}
+
+export const getArtistTopTracks = async (req, res) => {
+    try {
+        const { artistId } = req.params;
+
+        const data = await spotifyApi.getArtistTopTracks(artistId, { country: 'IN' }).then((value) => value)
+        
+        const normalizedArtistTracks = normalizeSingleArtistTracks(data.body.tracks)
+
+        return res.status(200).json({
+            success: true,
+            artistTopTracks: normalizedArtistTracks
         })
     } catch (error) {
         console.log(error);
@@ -179,6 +203,27 @@ export const getSingleAlbum = async (req, res) => {
     }
 };
 
+export const getTrackDetails = async (req, res) => {
+    try {
+        const { trackId } = req.params;
+
+        const data = await spotifyApi.getTrack(trackId);
+
+        const normalizedTrack = normalizeTrack(data.body);
+        
+        return res.status(200).json({
+            success: true,
+            trackDetails: normalizedTrack
+        })
+        
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            message: "Error in getTrackDetails"
+        })
+    }
+};
 
 
 
