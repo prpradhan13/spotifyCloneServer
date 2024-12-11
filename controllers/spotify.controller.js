@@ -1,5 +1,6 @@
 import spotifyApi from "../utils/getAccessToken.js";
 import { normalizeAlbums, normalizePopularPlaylists, normalizeSeveralArtists, normalizeSingleAlbum, normalizeSingleArtistData, normalizeSingleArtistTracks, normalizeSinglePlaylist, normalizeTrack } from "../utils/normalizeResponseData.js";
+import playBack from "../data.json" assert {type: 'json'}; // to import a JSON file (data.json) in a Node.js module, but Node.js now requires an import assertion for JSON files.
 
 export const getPopularPlaylists = async (req, res) => {
     try {
@@ -210,10 +211,12 @@ export const getTrackDetails = async (req, res) => {
         const data = await spotifyApi.getTrack(trackId);
 
         const normalizedTrack = normalizeTrack(data.body);
+
+        const playbackData = playBack.playbackData.filter((elem) => elem.id === normalizedTrack.id);
         
         return res.status(200).json({
             success: true,
-            trackDetails: normalizedTrack
+            trackDetails: {normalizedTrack, playbackData}
         })
         
     } catch (error) {
