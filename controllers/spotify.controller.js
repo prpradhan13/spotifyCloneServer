@@ -1,5 +1,5 @@
 import spotifyApi from "../utils/getAccessToken.js";
-import { normalizeAlbums, normalizePopularPlaylists, normalizeSeveralArtists, normalizeSingleAlbum, normalizeSingleArtistData, normalizeSingleArtistTracks, normalizeSinglePlaylist, normalizeTrack } from "../utils/normalizeResponseData.js";
+import { normalizeAlbums, normalizePopularPlaylists, normalizeSearchTrack, normalizeSeveralArtists, normalizeSingleAlbum, normalizeSingleArtistData, normalizeSingleArtistTracks, normalizeSinglePlaylist, normalizeTrack } from "../utils/normalizeResponseData.js";
 import playBack from "../data.json" assert {type: 'json'}; // to import a JSON file (data.json) in a Node.js module, but Node.js now requires an import assertion for JSON files.
 
 export const getPopularPlaylists = async (req, res) => {
@@ -228,5 +228,32 @@ export const getTrackDetails = async (req, res) => {
     }
 };
 
+export const getSearch = async (req, res) => {
+    try {
+        const { query, type = "track", limit = 10 } = req.query; 
 
+        if (!query) {
+            return res.status(400).json({
+              success: false,
+              message: "Query parameter is required",
+            });
+        }
+
+        const data = await spotifyApi.search(query, [type], {limit})
+
+        const normalizedSearchTracks = normalizeSearchTrack(data.body.tracks.items)
+
+        return res.status(200).json({
+            success: true,
+            searchData: normalizedSearchTracks,
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            message: "Error in getSearch"
+        })
+    }
+};
 

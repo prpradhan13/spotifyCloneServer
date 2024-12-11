@@ -77,3 +77,12 @@ export const normalizeTrack = (track) => {
     imageUrl: track.album.images?.[0]?.url || '',
   }
 }
+
+export const normalizeSearchTrack = (searchTrack) => {
+  return searchTrack.map(track => ({
+    id: track.id,
+    trackName: track.name,
+    artists: track.artists,
+    imageUrl: track.album.images?.[0]?.url || '',
+  }));
+}
