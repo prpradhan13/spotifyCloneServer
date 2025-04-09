@@ -1,6 +1,6 @@
 import spotifyApi from "../utils/getAccessToken.js";
 import { normalizeAlbums, normalizePopularPlaylists, normalizeSearchTrack, normalizeSeveralArtists, normalizeSingleAlbum, normalizeSingleArtistData, normalizeSingleArtistTracks, normalizeSinglePlaylist, normalizeTrack } from "../utils/normalizeResponseData.js";
-import playBack from "../data.json" assert {type: 'json'}; // to import a JSON file (data.json) in a Node.js module, but Node.js now requires an import assertion for JSON files.
+import playBack from "../data.json" with { type: "json" };
 
 export const getPopularPlaylists = async (req, res) => {
     try {
@@ -256,4 +256,3 @@ export const getSearch = async (req, res) => {
         })
     }
 };
-
